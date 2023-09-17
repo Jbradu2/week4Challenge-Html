@@ -1,109 +1,130 @@
-// Assignment code here
+
+//variable to use for array of true/false questions
+var testQuestions = [
+  {
+    question: "H.T.M.L. Stands for Hyper text markup language.",
+    answer: true,
+  },
+  {
+    question: "JavaScript is a type of coding language.",
+    answer: true,
+  },
+  {
+    question: "Learning to code is impossible.",
+    answer: false,
+  },
+  {
+    question: "It is always good to get a handle on things using variables.",
+    answer: true,
+  },
+  {
+    question: "Console.log helps pinpoint errors",
+    answer: true,
+  },
+];
+//need to make questions start at beggining of array
+var currentQuestionIndex = 0;
+//var to keep track of score 
+//var score = 
+// get handle on questions box, question choices, start button, nextQuestion button 
+var startButton = document.getElementById("startButton");
+var quizButton = document.getElementById("quizButton")
+var question =document.getElementById("questions");
+var answerChoices= document.getElementById("anwserChoices");
+var trueButton = document.getElementById("trueButton");
+var falseButton = document.getElementById("falseButton");
+var timer = document.getElementById("timeLeft");
+var clock;
+var timeLeft = 75;
 
 
-// Get references to the #generate element
-var generateBtn = document.querySelector("#generate");
-//-Will need a varaible for: passwordLength, lowercase, uppercase, and special characters.. and numbers. arrays?
 
-var charSet =""
-var passwordResult = ""
-var lowerCase = "abcdefghijklmnopqrstuvwxyz";
-var upperCase = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-var specialCharacters = "!#$%'()*+,-./:;<=>?@[\\\"]^_`{|}~";
-var numbers = "1234567890";
-function generatePassword(){
-
-  var passwordLength = parseInt(prompt ("PLEASE CHOOSE HOW MANY CHARACTERS IN YOUR PASSWORD BETWEEN 8 - 128"));
-
-  if (passwordLength<8){
-    alert ("PASSWORD MUST BE AT LEAST 8 CHARACTERS");
-  }else if (passwordLength>128){
-    alert ("PASSWORD CAN BE NO GREATER THAN 128 CHARACTERS");
-  }else if (isNaN(passwordLength)){
-    alert ("MUST SELECT NUMERICLE NUMBERS FOR THIS STAGE");
+function Question() {
+  var currentQuestion = testQuestions[currentQuestionIndex];
+  if (currentQuestionIndex < testQuestions.length) {
+    //make function that rotates questions through 
+    question.textContent = "Question " + (currentQuestionIndex + 1) + ": " + currentQuestion.question;
+  } else{
+    endQuiz()
   }
-var chooseCharType = confirm ("Would you like to use special characters?")
-var chooseLowerCase = confirm ("Would you like to use lowercae?")
-var chooseUppercase = confirm ("Would you like to use Uppercase?")
-var chooseNumbers = confirm ("Would you like to use numbers?")
-console.log(chooseCharType,chooseLowerCase,chooseUppercase,chooseNumbers,passwordLength)
-if (!chooseCharType&&!chooseLowerCase&&!chooseUppercase&&!chooseNumbers){
-  alert("MUST CHOOSE AT LEAST 1 OPTION")
-}
-if (chooseCharType === true){
-  charSet += specialCharacters
-
-}
-if (chooseLowerCase === true){
- charSet += lowerCase
-}
-if (chooseUppercase === true){
-  charSet += upperCase
-}
-if (chooseNumbers === true) {
-charSet += numbers
-}
-console.log(charSet)
-for (var i= 0; i<passwordLength; i++){
-  var randomCharset = Math.floor(Math.random()*charSet.length)
-  passwordResult += charSet.charAt(randomCharset)
-}
-  return passwordResult
+console.log(Question)
 }
 
 
-// Write password to the #password input
-function writePassword() { 
-  //missing generate password function
-  var password = generatePassword();
-  var passwordText = document.querySelector("#password");
 
-  passwordText.value = password;
 
+
+//function timer
+//how to save high scores?
+var score = 0;
+//make function to check true or false anwseres based on array and button clicked.
+//need event listeners for buttons
+
+function checkAnswerChoice(answer){
+  var anwserChoice= testQuestions[currentQuestionIndex].answer;
+  if (answer === anwserChoice){
+    score++;
+  }
+    //move to next question?
+    currentQuestionIndex++;
+    Question();
+  }
+
+
+trueButton.addEventListener("click", function() {
+  checkAnswerChoice(true);
+});
+falseButton.addEventListener("click", function() {
+  checkAnswerChoice(false);
+});
+//make timer
+//var start =document.getElementById(start)
+//how to make quiz end when timer hits 0?
+// Function to update the timer
+function updateTimer() {
+  if (timeLeft > 0) {
+      timeLeft--;
+      timer.textContent = timeLeft;
+  } else {
+    endQuiz();
+  }
 }
 
+function endQuiz() {
+  clearInterval(clock);
+  var initials =prompt("enter initials")
+var initialsDisplay = document.getElementById("high-score-box");
+  initialsDisplay.textContent = "Initials: " + initials +  score;
+}
+//use .local storage
+//will need for loop
+// for (var i=0; i< var.length;i++)
+// .addEventListener("click", function(event))
+//  var clickeditem = event.target;
 
-//will need to make functions to determine length, and if user wants uppercase, numeric(numbers) lowercase, and special characters
-//need to include list of each to define in variable
+// if (clickeditem.matches)
 
-//GIVEN I need a new, secure password
-//WHEN I click the button to generate a password
-//THEN I am presented with a series of "prompts"-(instructs the browser to display a dialog with an 
-//     optional message prompting the user to input some text, and to wait until the user either 
-//     submits the text or cancels the dialog.) for password criteria
+// GIVEN I am taking a code quiz
+// WHEN I click the start button
+// THEN a timer starts and I am presented with a question
+// WHEN I answer a question
+// THEN I am presented with another question
+// WHEN I answer a question incorrectly
+// THEN time is subtracted from the clock
+// WHEN all questions are answered or the timer reaches 0
+// THEN the game is over
+// WHEN the game is over
+// THEN I can save my initials and score
 
-//WHEN prompted for password criteria
-//THEN I select which criteria to include in the password
-//WHEN prompted for the length of the password
-//THEN I choose a length of at least 8 characters and no more than 128 characters
 
-//WHEN asked for character types to include in the password
-// can use alert()? alert to notify when user is outside of password parameters for each prompt
-//these create "yes" or "no" booleans
-// var chooseCharType = confirm ("must special characters?")
-// var chooseUppercase = confirm ("Would you like to use lowercae?")
-// var chooseUppercase = confirm ("Would you like to use Uppercase?")
-// var chooseUppercase = confirm ("Would you like to use numbers?")
-//THEN I confirm whether or not to include lowercase, uppercase, numeric, and/or special characters
-//WHEN I answer each prompt
-// must make 16 variation/combinations of anwsers
-//                       make prompts required
-// for (var i = 0; i < passwordLength; i++) {
-//   //picks a character within charSet at index of random number
-//   V1 += V2 (Math.floor(Math.random() * charSet.length));
-// }
-// can this all be 1 function?
- //               prompt ("Do you want to use lowercase?")
- //               prompt ("Do you want to use uppercase?")
- //               prompt ("Do you want to use numeric?")
- //               prompt ("Do you want to use special characters?")
-//THEN my input should be validated and at least ONE character type should be selected
-//WHEN all prompts are answered
-//THEN a password is generated that matches the selected criteria
-//WHEN the password is generated
-//THEN the password is either displayed in an alert or written to the page- look up how to display..\\
 
-// console.log(math.floor)
+//starts quiz on click of start, displays first question in array
 
-// Add event listener to generate button
-generateBtn.addEventListener("click", writePassword);
+function startQuiz() {
+  startButton.disabled = true;
+  Question(currentQuestionIndex);
+  timer = setInterval(updateTimer, 1000);
+}
+// falseButton.addEventListener('click',
+// trueButton.addEventListener('click',
+startButton.addEventListener('click', startQuiz);
